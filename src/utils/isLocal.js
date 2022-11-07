@@ -1,0 +1,1 @@
+export const isLocal = () => process.env.IS_LOCAL === 'local'

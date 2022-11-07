@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 
-const User = mongoose.model("User", {
-    user: { type: String },
+export const User = mongoose.model("User", {
+    name: { type: String },
     email: { type: String },
     password: { type: String },
     role: { type: String },
+    flag: { type: String },
     list: [
         {
             id: { type: String },
@@ -14,4 +15,3 @@ const User = mongoose.model("User", {
 
 });
 
-module.exports = User;
