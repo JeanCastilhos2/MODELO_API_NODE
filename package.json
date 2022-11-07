@@ -4,6 +4,7 @@
   "author": "Jean Carlos de Castilhos",
   "main": "index.ts",
   "scripts": {
+    "start": "nodemon src/index.ts",
     "dev": "nodemon src/index.ts"
   },
   "dependencies": {
