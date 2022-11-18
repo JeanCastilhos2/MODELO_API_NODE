@@ -17,11 +17,6 @@ export const UserRequest = ({ params, body, query }) => {
         return type && types.includes(type)
     }
 
-    const isValidFlag = () => {
-        const flags = [USER_DISABLED, USER_ENABLED]
-        return flag && flags.includes(flag)
-    }
-
     const isRequired = () => {
         return name && email && type && !flag
     }
@@ -44,23 +39,7 @@ export const UserRequest = ({ params, body, query }) => {
         }
         throw new HttpError(Message.CREATE_ERROR, HttpStatusCode.BAD_REQUEST)
     }
-
-    const isValidBodyForUpdateUser = () => {
-        let user = { ...body }
-        if (password) {
-            user = {
-                ...user,
-                id: id
-            }
-        }
-
-        if (!flag || isValidFlag()) {
-            return { ...user }
-        }
-        throw new HttpError(Message.CREATE_ERROR, HttpStatusCode.BAD_REQUEST)
-    }
-
-    const firstLogin = () => {
+    const getUserCreate = () => {
         const user = isValidBodyForCreateUser()
         const passwords = generatePassword()
         return {
@@ -71,22 +50,17 @@ export const UserRequest = ({ params, body, query }) => {
         }
     }
 
-
     const getUserUpdate = () => {
-        return isValidBodyForUpdateUser()
-    }
-
-    const getUser = () => {
-        const user = isValidBodyForUpdateUser()
-        return {
-            id,
-            ...user,
+        let user = { ...body }
+            user = {
+                ...user,
+                id: id
+            }
+        return user
         }
-    }
 
     return {
-        firstLogin,
-        getUser,
+        getUserCreate,
         getUserUpdate,
     }
 }
