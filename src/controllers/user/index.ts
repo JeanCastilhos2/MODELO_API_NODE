@@ -29,6 +29,20 @@ export const updateUser = async (request, response) => {
   }
 }
 
+export const deleteUser = async (request, response) => {
+  try {
+    const result = await userService(request).deleteUser()
+    return httpResponse.createSuccessResponse(
+      Message.REMOVED,
+      result,
+      response)
+  } catch (error) {
+    return httpResponse.createErrorResponse(error, response)
+  }
+}
+
+
+
 export const getUser = async (request, response) => {
   try {
     const result = await userService(request).getAllUser()

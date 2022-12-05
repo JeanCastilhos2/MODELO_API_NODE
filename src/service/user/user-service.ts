@@ -4,12 +4,13 @@ import { User } from "../../models/Entity/User"
 import { HttpError, HttpStatusCode } from "../HttpError"
 import { UserRequest } from "./user-request"
 import md5 from "md5"
+import { getSkip } from "../../utils/getSkip"
 
 export const userService = (request) => {
 
     const createUser = async () => {
         const { name, email, type, flag, password, decodedPassword } =
-            UserRequest(request).getUserCreate()
+            UserRequest(request).getUserForCreate()
         const findUser = await User.findOne({ email })
         if (findUser) {
             throw new HttpError(
@@ -39,8 +40,8 @@ export const userService = (request) => {
 
     const updateUser = async () => {
         const { name, type, flag, password, _id } =
-            UserRequest(request).getUserUpdate()
-        
+            UserRequest(request).getUserForUpdate()
+
         let userForUpdate = await User.findById({ _id })
         if (!userForUpdate.email) {
             throw new HttpError(
@@ -61,25 +62,45 @@ export const userService = (request) => {
         if (flag) {
             userForUpdate.flag = flag
         }
-        
+
         const updatedUser = userForUpdate.save()
 
         return updatedUser
     }
 
+    const deleteUser = async () => {
+        const {_id } =
+            UserRequest(request).getUserForDelete()
+
+        let userForDelete = await User.findById({ _id })
+        if (!userForDelete) {
+            throw new HttpError(
+                `User not found with: ${_id}`,
+                HttpStatusCode.BAD_REQUEST
+            )
+        }
+        const deleteUser = userForDelete.remove()
+
+        return deleteUser
+    }
+
+
     const getAllUser = async () => {
-        return await User.find({
-            select: [
-                "id",
-                "name",
-                "email",
-                "telephone",
-                "flag",
-                "role",
-                "createdAt",
-                "updatedAt",
-            ],
-        })
+        const {
+            orderBy = "name",
+            orientation = "ASC",
+            page = 0,
+            limit = 2,
+        } = request.query
+
+        const list = await User.find()
+            .sort(orderBy)
+            .limit(limit)
+            .skip(getSkip(page - 1, limit))
+
+        return {
+            users: list
+        }
     }
 
     return {

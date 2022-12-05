@@ -11,16 +11,6 @@ export const UserRequest = ({ params, body, query }) => {
     const { name, email, password, type, flag } = body
     const { id } = params
 
-    const isValidType = () => {
-        const { ADMIN, USER } = Roles
-        const types = [ADMIN, USER]
-        return type && types.includes(type)
-    }
-
-    const isRequired = () => {
-        return name && email && type && !flag
-    }
-
     const encryptPassword = (password) => md5(password)
 
     const generatePassword = () => {
@@ -33,13 +23,23 @@ export const UserRequest = ({ params, body, query }) => {
         }
     }
 
+    const isValidType = () => {
+        const { ADMIN, USER } = Roles
+        const types = [ADMIN, USER]
+        return type && types.includes(type)
+    }
+
+    const isRequired = () => {
+        return name && email && type && !flag
+    }
+
     const isValidBodyForCreateUser = () => {
         if (isRequired() && isValidType()) {
             return { ...body }
         }
         throw new HttpError(Message.CREATE_ERROR, HttpStatusCode.BAD_REQUEST)
     }
-    const getUserCreate = () => {
+    const getUserForCreate = () => {
         const user = isValidBodyForCreateUser()
         const passwords = generatePassword()
         return {
@@ -50,17 +50,25 @@ export const UserRequest = ({ params, body, query }) => {
         }
     }
 
-    const getUserUpdate = () => {
-        let user = { ...body }
-            user = {
-                ...user,
-                _id: id
-            }
-        return user
+    const getUserForUpdate = () => {
+        const user = {
+            ...body,
+            _id: id
         }
+        return user
+    }
+    const getUserForDelete = () => {
+        const user = {
+            ...body,
+            _id: id
+        }
+        return user
+
+    }
 
     return {
-        getUserCreate,
-        getUserUpdate,
+        getUserForCreate,
+        getUserForUpdate,
+        getUserForDelete
     }
 }

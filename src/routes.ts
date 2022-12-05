@@ -8,5 +8,6 @@ export const defineRoutes = (app) => {
     app.post("/user", createUser)
     app.get("/user", getUser)
     app.patch("/user/:id", updateUser)
+    app.delete("/user/:id", updateUser)
 
 }
