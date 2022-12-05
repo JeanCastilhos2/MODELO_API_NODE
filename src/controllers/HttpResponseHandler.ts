@@ -4,7 +4,7 @@ export const httpResponseHandler = () => {
 
   const createSuccessResponse = (message: string, data, response) => {
     const status = HttpStatusCode.OK
-    response.status(status).json({ message, data })
+    response.status(status).json({ message, Info: data })
     return response
   }
 

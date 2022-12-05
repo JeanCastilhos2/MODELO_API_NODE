@@ -54,7 +54,7 @@ export const UserRequest = ({ params, body, query }) => {
         let user = { ...body }
             user = {
                 ...user,
-                id: id
+                _id: id
             }
         return user
         }

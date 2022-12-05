@@ -38,13 +38,13 @@ export const userService = (request) => {
     }
 
     const updateUser = async () => {
-        const { name, email, type, flag, password, id } =
+        const { name, type, flag, password, _id } =
             UserRequest(request).getUserUpdate()
-
-        let userForUpdate = await User.findOne({ id })
-        if (!userForUpdate) {
+        
+        let userForUpdate = await User.findById({ _id })
+        if (!userForUpdate.email) {
             throw new HttpError(
-                `User not found with: ${id}`,
+                `User not found with: ${_id}`,
                 HttpStatusCode.BAD_REQUEST
             )
         }
@@ -61,8 +61,10 @@ export const userService = (request) => {
         if (flag) {
             userForUpdate.flag = flag
         }
+        
+        const updatedUser = userForUpdate.save()
 
-        return await User.save(userForUpdate)
+        return updatedUser
     }
 
     const getAllUser = async () => {

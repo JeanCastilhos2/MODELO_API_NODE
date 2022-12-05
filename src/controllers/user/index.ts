@@ -20,7 +20,10 @@ export const createUser = async (request, response) => {
 export const updateUser = async (request, response) => {
   try {
     const result = await userService(request).updateUser()
-    return httpResponse.createSuccessResponse(Message.UPDATED, result, response)
+    return httpResponse.createSuccessResponse(
+      Message.UPDATED,
+      result,
+      response)
   } catch (error) {
     return httpResponse.createErrorResponse(error, response)
   }
@@ -29,7 +32,10 @@ export const updateUser = async (request, response) => {
 export const getUser = async (request, response) => {
   try {
     const result = await userService(request).getAllUser()
-    return httpResponse.createSuccessResponse(Message.FOUND, result, response)
+    return httpResponse.createSuccessResponse(
+      Message.FOUND,
+      result,
+      response)
   } catch (error) {
     return httpResponse.createErrorResponse(error, response)
   }
