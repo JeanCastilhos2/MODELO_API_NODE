@@ -79,11 +79,15 @@ export const userService = (request) => {
                 HttpStatusCode.BAD_REQUEST
             )
         }
-        const deleteUser = userForDelete.remove()
+        userForDelete.remove()
 
-        return deleteUser
+        return { name: userForDelete.name, email: userForDelete.email}
     }
 
+    const findUserByEmail = async (email) => {
+        const user = await User.findOne({ where: { email } })
+        return user
+      }
 
     const getAllUser = async () => {
         const {
@@ -106,6 +110,8 @@ export const userService = (request) => {
     return {
         createUser,
         updateUser,
-        getAllUser,
+        deleteUser,
+        findUserByEmail,
+        getAllUser
     }
 }

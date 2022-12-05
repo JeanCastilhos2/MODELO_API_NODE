@@ -41,8 +41,6 @@ export const deleteUser = async (request, response) => {
   }
 }
 
-
-
 export const getUser = async (request, response) => {
   try {
     const result = await userService(request).getAllUser()
