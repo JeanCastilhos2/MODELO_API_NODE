@@ -8,7 +8,7 @@ export const createUser = async (request, response) => {
   try {
     const result = await userService(request).createUser()
     return httpResponseHandler().createSuccessResponse(
-      Message.EMAIL_SENT,
+      Message.USER_SAVE,
       result,
       response
     )
@@ -21,9 +21,10 @@ export const updateUser = async (request, response) => {
   try {
     const result = await userService(request).updateUser()
     return httpResponse.createSuccessResponse(
-      Message.UPDATED,
+      Message.USER_UPDATED,
       result,
-      response)
+      response
+    )
   } catch (error) {
     return httpResponse.createErrorResponse(error, response)
   }
@@ -33,9 +34,10 @@ export const deleteUser = async (request, response) => {
   try {
     const result = await userService(request).deleteUser()
     return httpResponse.createSuccessResponse(
-      Message.REMOVED,
+      Message.USER_REMOVED,
       result,
-      response)
+      response
+    )
   } catch (error) {
     return httpResponse.createErrorResponse(error, response)
   }
@@ -47,7 +49,8 @@ export const getUser = async (request, response) => {
     return httpResponse.createSuccessResponse(
       Message.FOUND,
       result,
-      response)
+      response
+    )
   } catch (error) {
     return httpResponse.createErrorResponse(error, response)
   }

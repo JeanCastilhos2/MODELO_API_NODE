@@ -1,7 +1,7 @@
 import { inviteEmailContent } from "@messages/email/content"
 import { User } from "../../models/Entity/User"
 //import { EmailService } from "@service/email/EmailService"
-import { HttpError, HttpStatusCode } from "../HttpError"
+import { HttpError, HttpStatusCode } from "../HttpStatus"
 import { UserRequest } from "./user-request"
 import md5 from "md5"
 import { getSkip } from "../../utils/getSkip"
@@ -69,7 +69,7 @@ export const userService = (request) => {
     }
 
     const deleteUser = async () => {
-        const {_id } =
+        const { _id } =
             UserRequest(request).getUserForDelete()
 
         let userForDelete = await User.findById({ _id })
@@ -81,13 +81,14 @@ export const userService = (request) => {
         }
         userForDelete.remove()
 
-        return { name: userForDelete.name, email: userForDelete.email}
+        return { name: userForDelete.name, email: userForDelete.email }
     }
 
-    const findUserByEmail = async (email) => {
+    const findUserByEmail = async () => {
+        const email = request.email
         const user = await User.findOne({ where: { email } })
         return user
-      }
+    }
 
     const getAllUser = async () => {
         const {

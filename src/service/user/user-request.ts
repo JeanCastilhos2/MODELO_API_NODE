@@ -1,5 +1,5 @@
 import { UserRegistrationStatus } from "../Flags"
-import { HttpError, HttpStatusCode } from "../HttpError"
+import { HttpError, HttpStatusCode } from "../HttpStatus"
 import { Message } from "../../messages/index"
 import { Roles } from "../Roles"
 import { isLocal } from "../../utils/isLocal"

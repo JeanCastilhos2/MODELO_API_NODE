@@ -1,9 +1,9 @@
-import { HttpError, HttpStatusCode } from '../service/HttpError'
+import { HttpError, HttpStatusCode } from '../service/HttpStatus'
 
 export const httpResponseHandler = () => {
 
   const createSuccessResponse = (message: string, result, response) => {
-    const status = HttpStatusCode.OK
+    const status = HttpStatusCode.CREATE
     response.status(status).json({ message, result })
     return response
   }

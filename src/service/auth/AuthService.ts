@@ -1,19 +1,20 @@
-import { HttpError, HttpStatusCode } from "../HttpError"
+import { HttpError, HttpStatusCode } from "../HttpStatus"
 import { userService } from "../user/user-service"
 import md5 from "md5"
 
 const jwt = require("jsonwebtoken")
 
-export const createAccessToken = async (emailUser, passwordUser) => {
+export const createAccessToken = async (request) => {
   const { SECRET } = process.env
+  const passwordUser = request.password
   let auth = true
 
-  const user = await userService(emailUser).findUserByEmail(emailUser)
+  const user = await userService(request).findUserByEmail()
 
   if (!user || user.password !== md5(passwordUser)) {
     throw new HttpError("Unauthorized", HttpStatusCode.UNAUTHORIZED)
   }
- 
+
   const payload = {
     name: user.name,
     email: user.email,
@@ -27,6 +28,12 @@ export const createAccessToken = async (emailUser, passwordUser) => {
     accessToken,
     user: payload,
   }
+}
+
+export const getRoleToken = (authorization = "") => {
+  const [, token] = authorization.split(" ")
+  const { role = null } = jwt.decode(token)
+  return role
 }
 
 export const validateAccessToken = (authorization = "", roles = []) => {
@@ -45,8 +52,4 @@ export const validateAccessToken = (authorization = "", roles = []) => {
   return isVerified && roles.includes(role)
 }
 
-export const getRoleToken = (authorization = "") => {
-  const [, token] = authorization.split(" ")
-  const { role = null } = jwt.decode(token)
-  return role
-}
+
