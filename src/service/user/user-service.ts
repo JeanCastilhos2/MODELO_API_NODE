@@ -108,11 +108,18 @@ export const userService = (request) => {
         }
     }
 
+    const getUserById = async () => {
+        const _id = request.params.id
+        const result = await User.findOne({ _id })
+        return result
+    }
+
     return {
         createUser,
         updateUser,
         deleteUser,
         findUserByEmail,
-        getAllUser
+        getAllUser,
+        getUserById
     }
 }

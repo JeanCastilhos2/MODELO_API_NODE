@@ -2,8 +2,7 @@ import { HttpError, HttpStatusCode } from '../service/HttpStatus'
 
 export const httpResponseHandler = () => {
 
-  const createSuccessResponse = (message: string, result, response) => {
-    const status = HttpStatusCode.CREATE
+  const createSuccessResponse = (message: string, result, response, status) => {
     response.status(status).json({ message, result })
     return response
   }
