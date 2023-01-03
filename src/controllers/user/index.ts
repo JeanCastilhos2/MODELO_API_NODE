@@ -8,7 +8,7 @@ const httpResponse = httpResponseHandler()
 export const createUser = async (request, response) => {
   try {
     const result = await userService(request).createUser()
-    const status = HttpStatusCode.OK
+    const status = HttpStatusCode.CREATE
     return httpResponseHandler().createSuccessResponse(
       Message.USER_SAVE,
       result,
@@ -23,7 +23,7 @@ export const createUser = async (request, response) => {
 export const updateUser = async (request, response) => {
   try {
     const result = await userService(request).updateUser()
-    const status = HttpStatusCode.OK
+    const status = HttpStatusCode.ACCEPTED
     return httpResponse.createSuccessResponse(
       Message.USER_UPDATED,
       result,
@@ -61,7 +61,7 @@ export const getAllUser = async (request, response) => {
       status
     )
   } catch (error) {
-    return httpResponse.createErrorResponse(error, response)
+    return response.status(HttpStatusCode.NOT_FOUND).json(Message.NOT_FOUND)
   }
 }
 
@@ -74,8 +74,8 @@ export const getUserById = async (request, response) => {
       result,
       response,
       status
-    )
+    ) 
   } catch (error) {
-    return httpResponse.createErrorResponse(error, response)
+    return response.status(HttpStatusCode.NOT_FOUND).json(Message.USER_NOT_FOUND)
   }
 }

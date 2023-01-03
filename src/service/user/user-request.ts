@@ -14,12 +14,12 @@ export const UserRequest = ({ params, body, query }) => {
     const encryptPassword = (password) => md5(password)
 
     const generatePassword = () => {
-        const randomPassword = isLocal()
+        const getPassword = isLocal()
             ? "123"
-            : Math.random().toString(36).slice(-10)
+            : password
         return {
-            encryptedPassword: encryptPassword(randomPassword),
-            decodedPassword: randomPassword,
+            encryptedPassword: encryptPassword(getPassword),
+            decodedPassword: getPassword,
         }
     }
 
@@ -30,14 +30,14 @@ export const UserRequest = ({ params, body, query }) => {
     }
 
     const isRequired = () => {
-        return name && email && type && !flag
+        return name && email && type
     }
 
     const isValidBodyForCreateUser = () => {
         if (isRequired() && isValidType()) {
             return { ...body }
         }
-        throw new HttpError(Message.CREATE_ERROR, HttpStatusCode.BAD_REQUEST)
+        throw new HttpError(Message.INCOMPLETE_REQUIREMENTS, HttpStatusCode.BAD_REQUEST)
     }
     const getUserForCreate = () => {
         const user = isValidBodyForCreateUser()

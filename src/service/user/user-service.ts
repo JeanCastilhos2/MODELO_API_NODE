@@ -18,7 +18,7 @@ export const userService = (request) => {
                 HttpStatusCode.CONFLICT
             )
         }
-        const user = User.create({
+        const createUser = User.create({
             name,
             email,
             type,
@@ -35,37 +35,38 @@ export const userService = (request) => {
            inviteEmailContent
          ) */
 
-        return { ...user, name, email, password: decodedPassword }
+        return { ...createUser, name, email, password: decodedPassword }
     }
 
     const updateUser = async () => {
-        const { name, type, flag, password, _id } =
+        const { name, email, flag, password, _id } =
             UserRequest(request).getUserForUpdate()
-
+        console.log(name.email)
         let userForUpdate = await User.findById({ _id })
+        console.log(userForUpdate)
         if (!userForUpdate.email) {
             throw new HttpError(
                 `User not found with: ${_id}`,
-                HttpStatusCode.BAD_REQUEST
+                HttpStatusCode.NOT_FOUND
             )
         }
-
-        if (password) {
-            userForUpdate.password = md5(password)
-        }
+        
         if (name) {
             userForUpdate.name = name
         }
-        if (type) {
-            userForUpdate.type = type
+        if (email) {
+            userForUpdate.email = email
+        }
+        if (password) {
+            userForUpdate.password = md5(password)
         }
         if (flag) {
             userForUpdate.flag = flag
         }
 
-        const updatedUser = userForUpdate.save()
+        const updateUser = User.findByIdAndUpdate(_id, userForUpdate)
 
-        return updatedUser
+        return updateUser
     }
 
     const deleteUser = async () => {
