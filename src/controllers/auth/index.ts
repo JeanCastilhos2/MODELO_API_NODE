@@ -1,22 +1,12 @@
 import { httpResponseHandler } from "../../controllers/HttpResponseHandler"
-import {
-  createAccessToken,
-  validateAccessToken,
-  getRoleToken,
-} from "../../service/auth/AuthService"
-import { UserRegistrationStatus } from "@service/Flags"
-import { Roles } from "../../service/Roles"
-const responseHandler = httpResponseHandler()
+import { createAccessToken, validateAccessToken } from "../../service/auth/AuthService"
 
 export const generateAccessToken = async (request, response) => {
-  const emailUser = request.body.email
-  const passwordUser = request.body.password
-
   try {
     const tokenPayload = await createAccessToken(request)
     return response.json(tokenPayload)
   } catch (error) {
-    return responseHandler.createErrorResponse(error, response)
+    return httpResponseHandler().createErrorResponse(error, response)
   }
 }
 

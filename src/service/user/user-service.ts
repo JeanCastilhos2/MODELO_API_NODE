@@ -115,12 +115,19 @@ export const userService = (request) => {
         return result
     }
 
+    const getUserByEmail = async () => {
+        const email = request.body.email
+        const result = await User.findOne({ email })
+        return result
+    }
+
     return {
         createUser,
         updateUser,
         deleteUser,
         findUserByEmail,
         getAllUser,
-        getUserById
+        getUserById,
+        getUserByEmail
     }
 }

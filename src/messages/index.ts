@@ -11,7 +11,8 @@ export enum Message {
     FOUND = "Informações encontradas com sucesso.",
     EMAIL_SENT = "Email enviado com sucesso!",
     EMAIL_NOT_SENT = "Falha ao enviar o e-mail",
-    INCOMPLETE_REQUIREMENTS= "Não foi possivel criar um usuario! Verfique se imformou coretamente os requistos'Name','Email', 'Type'",
+    INCOMPLETE_REQUIREMENTS = "Não foi possivel criar um usuario! Verfique se imformou coretamente os requistos'Name','Email', 'Type'",
+    EMAIL_PASSWORD_WRONG = "Email or Password is wrong !"
   }
   
   //incomplete requirements

@@ -1,26 +1,28 @@
 import { HttpError, HttpStatusCode } from "../HttpStatus"
 import { userService } from "../user/user-service"
+import { Message } from "../../messages/index"
 import md5 from "md5"
 
 const jwt = require("jsonwebtoken")
 
 export const createAccessToken = async (request) => {
+  
   const { SECRET } = process.env
-  const passwordUser = request.password
+  const { password } = request.body
   let auth = true
 
-  const user = await userService(request).findUserByEmail()
-
-  if (!user || user.password !== md5(passwordUser)) {
-    throw new HttpError("Unauthorized", HttpStatusCode.UNAUTHORIZED)
+  const user = await userService(request).getUserByEmail()
+  if (!user || user.password !== md5(password)) {
+    throw new HttpError(Message.EMAIL_PASSWORD_WRONG, HttpStatusCode.UNAUTHORIZED)
   }
 
   const payload = {
     name: user.name,
     email: user.email,
     role: user.type,
-    id: user.id,
+    _id: user._id,
   }
+
   const accessToken = jwt.sign(payload, SECRET, { expiresIn: "1d" })
 
   return {
