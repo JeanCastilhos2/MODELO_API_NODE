@@ -5,11 +5,17 @@ import { verifyAccessToken, generateAccessToken } from "./controllers/auth/index
 
 const { ADMIN, USER } = Roles
 
-
 export const defineRoutes = (app) => {
 
+    //ROUTES
+
     app.get("/", itsWorks)
+
+    //LOGIN
+
     app.post("/login", generateAccessToken)
+
+    //USER
 
     app.get(
         "/user",
@@ -35,4 +41,18 @@ export const defineRoutes = (app) => {
         verifyAccessToken([ADMIN]),
         deleteUser
     )
+
+    //LIST
+
+    app.get(
+        "/list:user_id",
+        verifyAccessToken([ADMIN, USER]),
+        getAllUser
+    )
+    app.post(
+        "/list",
+        verifyAccessToken([USER]),
+        getAllUser
+    )
+
 }

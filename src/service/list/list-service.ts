@@ -1,44 +1,27 @@
-import { inviteEmailContent } from "@messages/email/content"
+import { List } from "../../models/List"
 import { User } from "../../models/User"
-//import { EmailService } from "@service/email/EmailService"
 import { HttpError, HttpStatusCode } from "../HttpStatus"
-import { UserRequest } from "./user-request"
+import { ListRequest } from "./list-request"
 import md5 from "md5"
 import { getSkip } from "../../utils/getSkip"
 
 export const userService = (request) => {
 
-    const createUser = async () => {
-        const { name, email, type, flag, password, decodedPassword } =
-            UserRequest(request).getUserForCreate()
-        const findUser = await User.findOne({ email })
-        if (findUser) {
-            throw new HttpError(
-                "User already exist in database",
-                HttpStatusCode.CONFLICT
-            )
-        }
-        const createUser = User.create({
-            name,
-            email,
-            type,
-            flag,
-            password,
+    const createList = async () => {
+        const { user_id, title_id, title_type, rate } =
+            ListRequest(request).getListForCreate()
+
+        const createList = List.create({
+            user_id,
+            title_id,
+            title_type,
+            rate
         })
 
-        /*  sendEmail(
-           {
-             name,
-             email,
-             password: decodedPassword,
-           },
-           inviteEmailContent
-         ) */
-
-        return { ...createUser, name, email, password: decodedPassword }
+        return createList
     }
 
-    const updateUser = async () => {
+    const updateList = async () => {
         const { name, email, flag, password, _id } =
             UserRequest(request).getUserForUpdate()
         console.log(name.email)
@@ -50,7 +33,7 @@ export const userService = (request) => {
                 HttpStatusCode.NOT_FOUND
             )
         }
-        
+
         if (name) {
             userForUpdate.name = name
         }
@@ -83,12 +66,6 @@ export const userService = (request) => {
         userForDelete.remove()
 
         return { name: userForDelete.name, email: userForDelete.email }
-    }
-
-    const findUserByEmail = async () => {
-        const email = request.email
-        const user = await User.findOne({ where: { email } })
-        return user
     }
 
     const getAllUser = async () => {
