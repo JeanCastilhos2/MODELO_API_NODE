@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
-import { User } from "./User"
+const User = require('./User');
 
-export const List = mongoose.model("List", {
+export const List = new mongoose.model("List",{
     user_id: {
-        type: User.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'user_id'
     },
     title_id: {
@@ -21,4 +21,11 @@ export const List = mongoose.model("List", {
         default: Date.now
     }
 });
+
+
+
+
+
+
+
 

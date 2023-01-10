@@ -1,4 +1,4 @@
-import { inviteEmailContent } from "@messages/email/content"
+//import { inviteEmailContent } from "@messages/email/content"
 import { User } from "../../models/User"
 //import { EmailService } from "@service/email/EmailService"
 import { HttpError, HttpStatusCode } from "../HttpStatus"
@@ -103,7 +103,8 @@ export const userService = (request) => {
             .sort(orderBy)
             .limit(limit)
             .skip(getSkip(page - 1, limit))
-
+        
+        console.log(list)
         return {
             users: list
         }

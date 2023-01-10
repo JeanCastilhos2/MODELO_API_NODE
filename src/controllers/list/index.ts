@@ -53,6 +53,7 @@ export const deleteList = async (request, response) => {
 
 export const getListByUser = async (request, response) => {
   try {
+    console.log('chegou na controler')
     const result = await listService(request).getListByUser()
     const status = HttpStatusCode.FOUND
     return httpResponse.createSuccessResponse(
@@ -62,7 +63,7 @@ export const getListByUser = async (request, response) => {
       status
     )
   } catch (error) {
-    return response.status(HttpStatusCode.NOT_FOUND).json(Message.LIST_NOT_FOUND)
+    return response.status(404).json('lista não encontrada')
   }
 }
 export const getAllList = async (request, response) => {
@@ -76,7 +77,7 @@ export const getAllList = async (request, response) => {
       status
     )
   } catch (error) {
-    return response.status(HttpStatusCode.NOT_FOUND).json(Message.LIST_NOT_FOUND)
+    return response.status(404).json('lista não encontrada')
   }
 }
 

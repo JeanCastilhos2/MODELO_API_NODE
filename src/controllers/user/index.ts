@@ -61,7 +61,7 @@ export const getAllUser = async (request, response) => {
       status
     )
   } catch (error) {
-    return response.status(HttpStatusCode.NOT_FOUND).json(Message.NOT_FOUND)
+    return response.status(HttpStatusCode.NOT_FOUND).json(Message.USER_NOT_FOUND)
   }
 }
 

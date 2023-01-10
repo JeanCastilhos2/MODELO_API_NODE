@@ -5,7 +5,7 @@ export enum Message {
     USER_NOT_REMOVED = "Usuario não pode ser removido.",
     USER_UPDATED = "Usuario atualizado com sucesso!",
     USER_FOUND = "Usuario encontrado com sucesso!",
-    USER_NOT_FOUND = "Usuario foi encontrado.",
+    USER_NOT_FOUND = "Nenhum usuario foi encontrado.",
     USER_LIST_FOUND = "Lista de usuarios encontrada",
     LIST_SAVE = " Titulo salvo na lista com sucesso!",
     LIST_UPDATE = " Titulo foi atualizado ",

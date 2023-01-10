@@ -2,7 +2,7 @@ import { List } from "../../models/List"
 import { User } from "../../models/User"
 import { HttpError, HttpStatusCode } from "../HttpStatus"
 import { getSkip } from "../../utils/getSkip"
-import { Message } from "@messages/index"
+import { Message } from "../../messages/index"
 
 export const listService = (request) => {
 
@@ -34,7 +34,7 @@ export const listService = (request) => {
     }
 
     const deleteList = async () => {
-        const { _id } = request.body
+        const { _id } = request.params
         let listForDelete = await List.findById({ _id })
         if (!listForDelete) {
             throw new HttpError(
@@ -49,15 +49,9 @@ export const listService = (request) => {
 
     const getListByUser = async () => {
         const { user_id } = request.params
-        const {
-            page = 0,
-            limit = 5,
-        } = request.query
-
+        console.log(user_id)
         const list = await List.find(user_id)
-            .limit(limit)
-            .skip(getSkip(page - 1, limit))
-
+        console.log(list)
         return {
             Lists: list
         }

@@ -52,7 +52,7 @@ export const defineRoutes = (app) => {
     )
 
     app.get(
-        "/list:user_id",
+        "/list/:user_id",
         verifyAccessToken([ADMIN, USER]),
         getListByUser
     )
@@ -69,7 +69,7 @@ export const defineRoutes = (app) => {
     )
 
     app.delete(
-        "/list",
+        "/list/:_id",
         verifyAccessToken([ADMIN, USER]),
         deleteList
     )
