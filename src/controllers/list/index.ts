@@ -1,6 +1,6 @@
 import { httpResponseHandler } from "../HttpResponseHandler"
 import { Message } from "../../messages/index"
-import { listService } from "../../service/user/user-service"
+import { listService } from "../../service/list/list-service"
 import { HttpStatusCode } from '../../service/HttpStatus'
 
 const httpResponse = httpResponseHandler()
@@ -20,12 +20,12 @@ export const createList = async (request, response) => {
   }
 }
 
-export const listUser = async (request, response) => {
+export const updateList = async (request, response) => {
   try {
-    const result = await listService(request).deleteList()
+    const result = await listService(request).updateList()
     const status = HttpStatusCode.OK
     return httpResponse.createSuccessResponse(
-      Message.LIST_NOT_REMOVED,
+      Message.LIST_UPDATE,
       result,
       response,
       status
@@ -35,6 +35,36 @@ export const listUser = async (request, response) => {
   }
 }
 
+export const deleteLlist = async (request, response) => {
+  try {
+    const result = await listService(request).deleteList()
+    const status = HttpStatusCode.OK
+    return httpResponse.createSuccessResponse(
+      Message.LIST_REMOVED,
+      result,
+      response,
+      status
+    )
+  } catch (error) {
+    return httpResponse.createErrorResponse(error, response)
+  }
+}
+
+
+export const getListByUser = async (request, response) => {
+  try {
+    const result = await listService(request).getListByUser()
+    const status = HttpStatusCode.FOUND
+    return httpResponse.createSuccessResponse(
+      Message.USER_LIST_FOUND,
+      result,
+      response,
+      status
+    )
+  } catch (error) {
+    return response.status(HttpStatusCode.NOT_FOUND).json(Message.LIST_NOT_FOUND)
+  }
+}
 export const getAllList = async (request, response) => {
   try {
     const result = await listService(request).getAllList()

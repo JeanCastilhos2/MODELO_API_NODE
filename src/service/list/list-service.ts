@@ -1,16 +1,13 @@
 import { List } from "../../models/List"
 import { User } from "../../models/User"
 import { HttpError, HttpStatusCode } from "../HttpStatus"
-import { ListRequest } from "./list-request"
-import md5 from "md5"
 import { getSkip } from "../../utils/getSkip"
+import { Message } from "@messages/index"
 
-export const userService = (request) => {
+export const listService = (request) => {
 
     const createList = async () => {
-        const { user_id, title_id, title_type, rate } =
-            ListRequest(request).getListForCreate()
-
+        const { user_id, title_id, title_type, rate } = request.body
         const createList = List.create({
             user_id,
             title_id,
@@ -22,89 +19,70 @@ export const userService = (request) => {
     }
 
     const updateList = async () => {
-        const { name, email, flag, password, _id } =
-            UserRequest(request).getUserForUpdate()
-        console.log(name.email)
-        let userForUpdate = await User.findById({ _id })
-        console.log(userForUpdate)
-        if (!userForUpdate.email) {
+        const { _id, rate } = request.body
+        let listForUpdate = await List.findById({ _id })
+        if (!listForUpdate) {
             throw new HttpError(
-                `User not found with: ${_id}`,
-                HttpStatusCode.NOT_FOUND
-            )
-        }
-
-        if (name) {
-            userForUpdate.name = name
-        }
-        if (email) {
-            userForUpdate.email = email
-        }
-        if (password) {
-            userForUpdate.password = md5(password)
-        }
-        if (flag) {
-            userForUpdate.flag = flag
-        }
-
-        const updateUser = User.findByIdAndUpdate(_id, userForUpdate)
-
-        return updateUser
-    }
-
-    const deleteUser = async () => {
-        const { _id } =
-            UserRequest(request).getUserForDelete()
-
-        let userForDelete = await User.findById({ _id })
-        if (!userForDelete) {
-            throw new HttpError(
-                `User not found with: ${_id}`,
+                `List not found with: ${_id}`,
                 HttpStatusCode.BAD_REQUEST
             )
         }
-        userForDelete.remove()
+        listForUpdate.rate = rate
+        User.findByIdAndUpdate(_id, listForUpdate)
 
-        return { name: userForDelete.name, email: userForDelete.email }
+        return Message.LIST_UPDATE
     }
 
-    const getAllUser = async () => {
+    const deleteList = async () => {
+        const { _id } = request.body
+        let listForDelete = await List.findById({ _id })
+        if (!listForDelete) {
+            throw new HttpError(
+                `List not found with: ${_id}`,
+                HttpStatusCode.BAD_REQUEST
+            )
+        }
+        listForDelete.remove()
+
+        return Message.LIST_REMOVED
+    }
+
+    const getListByUser = async () => {
+        const { user_id } = request.params
         const {
-            orderBy = "name",
-            orientation = "ASC",
             page = 0,
-            limit = 2,
+            limit = 5,
         } = request.query
 
-        const list = await User.find()
-            .sort(orderBy)
+        const list = await List.find(user_id)
             .limit(limit)
             .skip(getSkip(page - 1, limit))
 
         return {
-            users: list
+            Lists: list
         }
     }
 
-    const getUserById = async () => {
-        const _id = request.params.id
-        const result = await User.findOne({ _id })
-        return result
-    }
+    const getAllList = async () => {
+        const {
+            page = 0,
+            limit = 5,
+        } = request.query
 
-    const getUserByEmail = async () => {
-        const email = request.body.email
-        const result = await User.findOne({ email })
-        return result
+        const list = await List.find()
+            .limit(limit)
+            .skip(getSkip(page - 1, limit))
+
+        return {
+            Lists: list
+        }
     }
 
     return {
-        createUser,
-        updateUser,
-        deleteUser,
-        findUserByEmail,
-        getAllUser,
-        getUserById,
-        getUserByEmail
+        createList,
+        updateList,
+        deleteList,
+        getListByUser,
+        getAllList
     }
 }
