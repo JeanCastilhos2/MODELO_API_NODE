@@ -1,6 +1,7 @@
 import { itsWorks } from "./controllers/index"
 import { Roles } from "./service/Roles"
 import { getAllUser, createUser, updateUser, deleteUser, getUserById } from "./controllers/user/index"
+import { createList, updateList, deleteList , getListByUser, getAllList } from "./controllers/list/index"
 import { verifyAccessToken, generateAccessToken } from "./controllers/auth/index"
 
 const { ADMIN, USER } = Roles
@@ -45,14 +46,32 @@ export const defineRoutes = (app) => {
     //LIST
 
     app.get(
+        "/list",
+        verifyAccessToken([ADMIN]),
+        getAllList
+    )
+
+    app.get(
         "/list:user_id",
         verifyAccessToken([ADMIN, USER]),
-        getAllUser
+        getListByUser
     )
     app.post(
         "/list",
-        verifyAccessToken([USER]),
-        getAllUser
+        verifyAccessToken([ADMIN, USER]),
+        createList
+    )
+
+    app.patch(
+        "/list",
+        verifyAccessToken([ADMIN, USER]),
+        updateList
+    )
+
+    app.delete(
+        "/list",
+        verifyAccessToken([ADMIN, USER]),
+        deleteList
     )
 
 }

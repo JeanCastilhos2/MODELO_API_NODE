@@ -35,7 +35,7 @@ export const updateList = async (request, response) => {
   }
 }
 
-export const deleteLlist = async (request, response) => {
+export const deleteList = async (request, response) => {
   try {
     const result = await listService(request).deleteList()
     const status = HttpStatusCode.OK
